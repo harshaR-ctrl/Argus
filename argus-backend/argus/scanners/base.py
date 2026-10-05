@@ -49,10 +49,10 @@ class BaseScanner(ABC):
                 [self.binary, "--version"],
                 capture_output=True,
                 text=True,
-                timeout=10,
                 shell=False,
             )
-            return result.stdout.strip().split("\n")[0]
+            out = result.stdout or ""
+            return out.strip().split("\n")[0]
         except Exception:
             return "unknown"
 

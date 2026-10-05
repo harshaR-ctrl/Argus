@@ -53,12 +53,12 @@ class OSVScanner(BaseScanner):
 
         raw = self._run_command(cmd, timeout=settings.scanner_timeout_seconds)
 
-        # OSV-Scanner: exit 0 = no vulns, exit 1 = vulns found, exit 2+ = error
         if raw.exit_code in (0, 1):
             raw.success = True
-            if raw.raw_output.strip():
+            out = raw.raw_output or ""
+            if out.strip():
                 try:
-                    raw.raw_json = json.loads(raw.raw_output)
+                    raw.raw_json = json.loads(out)
                 except json.JSONDecodeError as exc:
                     logger.warning(f"Failed to parse OSV-Scanner JSON: {exc}")
                     raw.raw_json = {"results": []}
