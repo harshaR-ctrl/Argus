@@ -1,0 +1,32 @@
+# ── Python / Backend ───────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+.venv/
+*.sqlite3
+*.db
+argus-backend/argus.db
+argus-backend/reports/
+argus-backend/temp/
+.pytest_cache/
+
+# ── Node.js / Frontend ─────────────────
+node_modules/
+.next/
+out/
+build/
+dist/
+argus-frontend/.env*.local
+argus-frontend/.env
+
+# ── General ────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+.agents/
+.gemini/

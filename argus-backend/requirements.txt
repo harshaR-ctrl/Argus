@@ -1,0 +1,29 @@
+# Core
+fastapi>=0.111
+uvicorn[standard]>=0.30
+pydantic>=2.6
+pydantic-settings>=2.2
+
+# Scanning
+gitpython>=3.1
+# (Semgrep removed on Windows - it is handled gracefully at runtime)
+
+# Templating & Reports
+jinja2>=3.1
+
+# HTTP
+httpx>=0.27
+requests>=2.31
+
+# Database
+aiosqlite>=0.20
+
+# WebSocket
+websockets>=12.0
+
+# Utilities
+python-dotenv>=1.0
+
+# Testing
+pytest>=8.0
+pytest-asyncio>=0.23
