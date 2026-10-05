@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./argus-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount reports to host for easy viewing
+      - ./argus-backend/reports:/app/reports
+      # Mount DB to persist history
+      - argus_db:/app/argus.db
+    env_file:
+      - ./argus-backend/.env
+    environment:
+      # Ensure host is 0.0.0.0 for Docker networking
+      - HOST=0.0.0.0
+      - PORT=8000
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./argus-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # Client-side requests to backend
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  argus_db:
