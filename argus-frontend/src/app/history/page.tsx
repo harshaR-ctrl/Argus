@@ -98,11 +98,11 @@ export default function HistoryPage() {
                   </div>
                   
                   <div style={{ fontSize: "13px", color: "var(--text-muted)", display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                    <span>📅 {formatDate(scan.created_at)}</span>
+                    <span>Date: {formatDate(scan.created_at)}</span>
                     {scan.status === "complete" && (
                       <>
-                        <span>⚠️ {scan.findings_count} findings</span>
-                        <span>⏱️ {scan.duration_seconds.toFixed(1)}s</span>
+                        <span>Findings: {scan.findings_count}</span>
+                        <span>Duration: {scan.duration_seconds.toFixed(1)}s</span>
                       </>
                     )}
                   </div>

@@ -61,7 +61,7 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-5)" }}>
             
             <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)" }}>🔍</div>
+              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>SAST</div>
               <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Code Vulnerabilities</h3>
               <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
                 Static analysis (SAST) using Semgrep to catch injection, XSS, insecure cryptography, and OWASP Top 10 flaws.
@@ -73,7 +73,7 @@ export default function Home() {
             </div>
 
             <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)" }}>🔑</div>
+              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>Secrets</div>
               <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Leaked Secrets</h3>
               <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
                 Deep scan with Gitleaks to find API keys, passwords, and tokens. Secrets are automatically masked in the report.
@@ -84,7 +84,7 @@ export default function Home() {
             </div>
 
             <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)" }}>📦</div>
+              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>SCA</div>
               <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Vulnerable Dependencies</h3>
               <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
                 Software Composition Analysis (SCA) via OSV-Scanner covering npm, PyPI, Maven, Go, and Rust ecosystems.
@@ -115,11 +115,11 @@ export default function Home() {
               </thead>
               <tbody>
                 {[
-                  ["Code vulnerabilities (SAST)", "◐ Time-consuming", "✓", "✓"],
-                  ["Leaked secrets", "◐ Easy to miss", "✗ Separate tool", "✓"],
-                  ["Vulnerable dependencies", "✗", "✗ Separate tool", "✓"],
-                  ["One unified report", "✗", "✗", "✓"],
-                  ["Severity + risk score", "✗", "◐ Per tool", "✓"],
+                  ["Code vulnerabilities (SAST)", "Time-consuming", "Yes", "Yes"],
+                  ["Leaked secrets", "Easy to miss", "Separate tool", "Yes"],
+                  ["Vulnerable dependencies", "No", "Separate tool", "Yes"],
+                  ["One unified report", "No", "No", "Yes"],
+                  ["Severity + risk score", "No", "Per tool", "Yes"],
                   ["Setup effort", "None", "Per-tool install", "One URL"],
                   ["Cost", "Your time", "Free", "Free"]
                 ].map((row, i) => (

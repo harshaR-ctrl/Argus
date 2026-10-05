@@ -107,7 +107,7 @@ export default function ScanPage() {
       <div className="card" style={{ padding: "var(--space-6)" }}>
         {status === "failed" ? (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "48px", marginBottom: "var(--space-4)" }}>❌</div>
+            <div style={{ fontSize: "48px", marginBottom: "var(--space-4)", fontWeight: "bold", color: "var(--sev-critical)" }}>X</div>
             <h2 style={{ color: "var(--sev-critical)", marginBottom: "var(--space-2)" }}>Scan Failed</h2>
             <p style={{ color: "var(--text-muted)" }}>{error || detail || "An unexpected error occurred."}</p>
             <button className="btn btn-secondary" style={{ marginTop: "var(--space-5)" }} onClick={() => window.history.back()}>

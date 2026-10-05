@@ -25,7 +25,7 @@ export default function Navbar() {
     <nav className={styles.nav}>
       <div className={`container ${styles.inner}`}>
         <Link href="/" className={styles.logo}>
-          <span className={styles.logoIcon}>◈</span> Argus
+          Argus
         </Link>
 
         <div className={`${styles.links} ${menuOpen ? styles.open : ""}`}>
@@ -45,7 +45,7 @@ export default function Navbar() {
             onClick={toggleTheme}
             aria-label="Toggle theme"
           >
-            ◐
+            T
           </button>
         </div>
 

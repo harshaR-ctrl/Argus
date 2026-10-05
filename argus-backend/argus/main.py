@@ -49,7 +49,7 @@ async def startup():
     init_db()
     settings.reports_dir.mkdir(parents=True, exist_ok=True)
     settings.temp_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"◈ Argus v{__version__} started on {settings.host}:{settings.port}")
+    logger.info(f"Argus v{__version__} started on {settings.host}:{settings.port}")
 
 
 @app.get("/")

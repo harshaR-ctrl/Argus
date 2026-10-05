@@ -6,7 +6,6 @@ export default function Footer() {
       <div className="container">
         <div className={styles.inner}>
           <div className={styles.brand}>
-            <span className={styles.logoIcon}>◈</span>
             <span style={{ fontWeight: 600, color: "var(--text)" }}>Argus</span>
           </div>
           

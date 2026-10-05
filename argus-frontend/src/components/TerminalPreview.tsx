@@ -5,12 +5,12 @@ import styles from "./TerminalPreview.module.css";
 
 const LINES = [
   { text: "$ argus scan https://github.com/OWASP/NodeGoat", delay: 500, prompt: true },
-  { text: "✓ Cloned OWASP/NodeGoat @ 3f9c2a1 (2.1s)", delay: 1500, color: "var(--accent)" },
-  { text: "✓ Semgrep      28 findings", delay: 2000, color: "var(--accent)" },
-  { text: "✓ Gitleaks      3 secrets", delay: 2500, color: "var(--accent)" },
-  { text: "✓ OSV-Scanner  41 vulnerable dependencies", delay: 3000, color: "var(--accent)" },
+  { text: "Cloned OWASP/NodeGoat @ 3f9c2a1 (2.1s)", delay: 1500, color: "var(--accent)" },
+  { text: "Semgrep      28 findings", delay: 2000, color: "var(--accent)" },
+  { text: "Gitleaks      3 secrets", delay: 2500, color: "var(--accent)" },
+  { text: "OSV-Scanner  41 vulnerable dependencies", delay: 3000, color: "var(--accent)" },
   { text: "Risk score: 82/100  Grade: F", delay: 3500, color: "var(--sev-critical)" },
-  { text: "Report → ./reports/OWASP__NodeGoat/report.html", delay: 4000, color: "var(--text-muted)" },
+  { text: "Report -> ./reports/OWASP__NodeGoat/report.html", delay: 4000, color: "var(--text-muted)" },
 ];
 
 export default function TerminalPreview() {

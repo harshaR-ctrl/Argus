@@ -12,11 +12,11 @@
   --border: #262626;
   --text: #f2f2f2;
   --text-muted: #9a9a9a;
-  --accent: #32CD32;
-  --accent-hover: #5EE05E;
+  --accent: #CCFF00;
+  --accent-hover: #D4FF33;
   --accent-fg: #000000;
-  --accent-text: #32CD32;
-  --glow: rgba(50, 205, 50, 0.25);
+  --accent-text: #B2DF00;
+  --glow: rgba(204, 255, 0, 0.25);
 
   /* Syntax highlighting */
   --tok-keyword: #ff6b81;
@@ -27,8 +27,8 @@
   --tok-type: #66d9ef;
   --tok-comment: #7a7a7a;
   --tok-punct: #f2f2f2;
-  --tok-key: #32CD32;
-  --tok-prompt: #32CD32;
+  --tok-key: #CCFF00;
+  --tok-prompt: #CCFF00;
 
   /* Severity */
   --sev-critical: #ff4d4d;
@@ -38,7 +38,7 @@
   --sev-info: #9a9a9a;
 
   /* Grades */
-  --grade-a: #32CD32;
+  --grade-a: #CCFF00;
   --grade-b: #a3e635;
   --grade-c: #ffd22e;
   --grade-d: #ff8c2e;
@@ -76,11 +76,11 @@
   --border: #d4d4d4;
   --text: #0a0a0a;
   --text-muted: #525252;
-  --accent: #32CD32;
-  --accent-hover: #2BB82B;
+  --accent: #99CC00;
+  --accent-hover: #7AA300;
   --accent-fg: #000000;
-  --accent-text: #1B7A1B;
-  --glow: rgba(50, 205, 50, 0.30);
+  --accent-text: #7AA300;
+  --glow: rgba(153, 204, 0, 0.30);
   --tok-keyword: #cf222e;
   --tok-string: #2f6b00;
   --tok-function: #8250df;
@@ -89,8 +89,8 @@
   --tok-type: #0b6e8a;
   --tok-comment: #6e6e6e;
   --tok-punct: #0a0a0a;
-  --tok-key: #1B7A1B;
-  --tok-prompt: #1B7A1B;
+  --tok-key: #7AA300;
+  --tok-prompt: #7AA300;
   --sev-critical: #cf222e;
   --sev-high: #bc4c00;
   --sev-medium: #9a6700;
@@ -106,11 +106,11 @@
     --border: #d4d4d4;
     --text: #0a0a0a;
     --text-muted: #525252;
-    --accent: #32CD32;
-    --accent-hover: #2BB82B;
+    --accent: #99CC00;
+    --accent-hover: #7AA300;
     --accent-fg: #000000;
-    --accent-text: #1B7A1B;
-    --glow: rgba(50, 205, 50, 0.30);
+    --accent-text: #7AA300;
+    --glow: rgba(153, 204, 0, 0.30);
   }
 }
 
@@ -353,7 +353,7 @@ button {
   transition: border-color 0.15s;
 }
 .card:hover {
-  border-color: rgba(50, 205, 50, 0.4);
+  border-color: rgba(204, 255, 0, 0.4);
 }
 
 /* ── Inputs ───────────────────────────────────────────────────────── */
@@ -374,7 +374,7 @@ button {
 .input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--glow), 0 8px 32px rgba(50, 205, 50, 0.08);
+  box-shadow: 0 0 0 1px var(--glow), 0 8px 32px rgba(204, 255, 0, 0.08);
 }
 .input.error {
   border-color: var(--sev-critical);
@@ -393,7 +393,7 @@ button {
   font-family: var(--font-mono);
   flex-shrink: 0;
 }
-.grade-A { background: rgba(50, 205, 50, 0.15); color: var(--grade-a); border: 2px solid var(--grade-a); }
+.grade-A { background: rgba(204, 255, 0, 0.15); color: var(--grade-a); border: 2px solid var(--grade-a); }
 .grade-B { background: rgba(163, 230, 53, 0.15); color: var(--grade-b); border: 2px solid var(--grade-b); }
 .grade-C { background: rgba(255, 210, 46, 0.15); color: var(--grade-c); border: 2px solid var(--grade-c); }
 .grade-D { background: rgba(255, 140, 46, 0.15); color: var(--grade-d); border: 2px solid var(--grade-d); }

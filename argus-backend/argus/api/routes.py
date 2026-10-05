@@ -356,7 +356,7 @@ async def _run_scan(
                 )
                 _update_progress(
                     scan_id, ScanStatus.SCANNING, f"{scanner_name}",
-                    f"⚠ {scanner_name} not available — skipped", int(progress_pct),
+                    f"{scanner_name} not available — skipped", int(progress_pct),
                 )
                 await _notify_ws(scan_id)
                 continue
@@ -388,7 +388,7 @@ async def _run_scan(
                 all_findings.extend(findings)
                 _update_progress(
                     scan_id, ScanStatus.SCANNING, f"{scanner_name}",
-                    f"✓ {scanner_name}: {len(findings)} findings", int(progress_pct),
+                    f"{scanner_name}: {len(findings)} findings", int(progress_pct),
                 )
                 await _notify_ws(scan_id)
 
