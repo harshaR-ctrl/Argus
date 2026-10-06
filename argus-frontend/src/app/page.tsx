@@ -1,56 +1,148 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import ScanInput from "@/components/ScanInput";
 import TerminalPreview from "@/components/TerminalPreview";
+import styles from "./page.module.css";
+
+/* SVG icons for feature cards */
+const icons = {
+  sast: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="16 18 22 12 16 6"/>
+      <polyline points="8 6 2 12 8 18"/>
+      <line x1="14" y1="4" x2="10" y2="20" opacity="0.5"/>
+    </svg>
+  ),
+  secrets: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      <circle cx="12" cy="16" r="1"/>
+    </svg>
+  ),
+  sca: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+      <line x1="12" y1="22.08" x2="12" y2="12"/>
+    </svg>
+  ),
+};
+
+const stepIcons = {
+  paste: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </svg>
+  ),
+  clone: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+      <line x1="12" y1="22.08" x2="12" y2="12"/>
+    </svg>
+  ),
+  scan: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="8"/>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+  ),
+  report: (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="20" x2="18" y2="10"/>
+      <line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+  ),
+};
+
+function useScrollReveal() {
+  const ref = useRef<(Element | null)[]>([]);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    ref.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return ref;
+}
 
 export default function Home() {
+  const revealRefs = useScrollReveal();
+  let refIndex = 0;
+  const addRef = (el: HTMLElement | null) => {
+    if (el) {
+      const idx = parseInt(el.dataset.revealIdx || "0");
+      revealRefs.current[idx] = el;
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
-      <section className="section" style={{ paddingTop: "var(--space-9)" }}>
-        <div className="container" style={{ textAlign: "center" }}>
-          <h1 
-            style={{ 
-              fontSize: "clamp(36px, 5vw, 56px)", 
-              fontWeight: 700, 
-              letterSpacing: "-0.02em",
-              maxWidth: "var(--max-width-hero)",
-              margin: "0 auto var(--space-4)"
-            }}
-          >
-            Scan any GitHub repo for vulnerabilities.
-          </h1>
-          <p 
-            style={{ 
-              fontSize: "18px", 
-              color: "var(--text-muted)", 
-              maxWidth: "600px", 
-              margin: "0 auto var(--space-6)" 
-            }}
-          >
-            Code flaws, leaked secrets, and vulnerable dependencies — 
-            in one readable report. Free and open-source.
-          </p>
+      <section className={`section ${styles.hero}`}>
+        {/* Animated grid background */}
+        <div className={styles.heroBg}>
+          <div className={styles.heroGrid} />
+          <div className={styles.heroGlow} />
+        </div>
 
-          <ScanInput />
-          
-          <div style={{ marginTop: "var(--space-7)" }}>
-            <TerminalPreview />
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.heroBadgeDot} />
+              Open-source vulnerability scanner
+            </div>
+
+            <h1 className={styles.heroTitle}>
+              Scan any GitHub repo
+              <br />
+              for <span className={styles.heroAccent}>vulnerabilities</span>.
+            </h1>
+
+            <p className={styles.heroSub}>
+              Code flaws, leaked secrets, and vulnerable dependencies &mdash; 
+              in one readable report. Free and open-source.
+            </p>
+
+            <ScanInput />
+            
+            <div className={styles.heroTerminal}>
+              <TerminalPreview />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Integrations Strip */}
-      <section style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", padding: "var(--space-4) 0", background: "var(--surface)" }}>
-        <div className="container" style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "13px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "var(--space-4)" }}>
+      <section className={styles.integrations}>
+        <div className="container">
+          <p className={styles.integrationsLabel}>
             Powered by open-source tools
           </p>
-          <div style={{ display: "flex", justifyContent: "center", gap: "var(--space-6)", flexWrap: "wrap", opacity: 0.6 }}>
-            {/* Minimal text representations since we don't have SVGs yet */}
-            <span style={{ fontWeight: 600, fontSize: "18px" }}>Semgrep</span>
-            <span style={{ fontWeight: 600, fontSize: "18px" }}>Gitleaks</span>
-            <span style={{ fontWeight: 600, fontSize: "18px" }}>OSV-Scanner</span>
-            <span style={{ fontWeight: 600, fontSize: "18px" }}>Docker</span>
-            <span style={{ fontWeight: 600, fontSize: "18px" }}>Python</span>
+          <div className={styles.integrationsGrid}>
+            {["Semgrep", "Gitleaks", "OSV-Scanner", "Docker", "Python"].map((name) => (
+              <div key={name} className={styles.integrationItem}>
+                <span className={styles.integrationName}>{name}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -58,76 +150,165 @@ export default function Home() {
       {/* Features */}
       <section id="features" className="section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-5)" }}>
-            
-            <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>SAST</div>
-              <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Code Vulnerabilities</h3>
-              <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
-                Static analysis (SAST) using Semgrep to catch injection, XSS, insecure cryptography, and OWASP Top 10 flaws.
-              </p>
-              <div className="code-block" style={{ fontSize: "12px", padding: "8px" }}>
-                <span className="tok-comment"># CWE-89 SQL Injection</span><br/>
-                <span className="tok-function">execute</span>(<span className="tok-string">"SELECT * FROM users WHERE id="</span> + <span className="tok-variable">id</span>)
-              </div>
-            </div>
+          <div style={{ textAlign: "center", marginBottom: "var(--space-7)" }}>
+            <p className="section-label">Features</p>
+            <h2 className="section-title">Three scanners, one report</h2>
+            <p className="section-subtitle" style={{ margin: "0 auto" }}>
+              Argus combines industry-standard security tools into a unified, 
+              easy-to-understand vulnerability report.
+            </p>
+          </div>
 
-            <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>Secrets</div>
-              <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Leaked Secrets</h3>
-              <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
-                Deep scan with Gitleaks to find API keys, passwords, and tokens. Secrets are automatically masked in the report.
-              </p>
-              <div className="code-block" style={{ fontSize: "12px", padding: "8px" }}>
-                <span className="tok-keyword">const</span> <span className="tok-variable">AWS_KEY</span> = <span className="tok-string">"AKIA••••MPLE"</span>;
+          <div className={styles.featuresGrid}>
+            {[
+              {
+                icon: icons.sast,
+                label: "SAST",
+                title: "Code Vulnerabilities",
+                desc: "Static analysis using Semgrep to catch injection, XSS, insecure cryptography, and OWASP Top 10 flaws.",
+                snippet: { comment: "# CWE-89 SQL Injection", code: 'execute("SELECT * FROM users WHERE id=" + id)' },
+                detects: ["SQL Injection", "XSS", "SSRF", "Hardcoded Crypto"],
+              },
+              {
+                icon: icons.secrets,
+                label: "Secrets",
+                title: "Leaked Secrets",
+                desc: "Deep scan with Gitleaks to find API keys, passwords, and tokens committed to your codebase.",
+                snippet: { comment: "# Leaked AWS credential", code: 'AWS_KEY = "AKIA\u2022\u2022\u2022\u2022MPLE"' },
+                detects: ["API Keys", "Passwords", "Private Keys", "Tokens"],
+              },
+              {
+                icon: icons.sca,
+                label: "SCA",
+                title: "Vulnerable Dependencies",
+                desc: "Software Composition Analysis via OSV-Scanner covering npm, PyPI, Maven, Go, and Rust ecosystems.",
+                snippet: { comment: "// GHSA-xxxx advisory", code: '"express": "4.16.0" \u2192 4.21.0' },
+                detects: ["npm", "PyPI", "Maven", "Go Modules"],
+              },
+            ].map((feat, i) => (
+              <div
+                key={i}
+                className={`card ${styles.featureCard} reveal`}
+                data-reveal-idx={refIndex}
+                ref={addRef}
+                {...(refIndex++, {})}
+              >
+                <div className={styles.featureIconWrap}>
+                  {feat.icon}
+                </div>
+                <div className={styles.featureLabel}>{feat.label}</div>
+                <h3 className={styles.featureTitle}>{feat.title}</h3>
+                <p className={styles.featureDesc}>{feat.desc}</p>
+                <div className={styles.featureSnippet}>
+                  <div className="tok-comment">{feat.snippet.comment}</div>
+                  <div>{feat.snippet.code}</div>
+                </div>
+                <div className={styles.featureTags}>
+                  {feat.detects.map((tag) => (
+                    <span key={tag} className={styles.featureTag}>{tag}</span>
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            <div className="card">
-              <div style={{ fontSize: "24px", color: "var(--accent)", marginBottom: "var(--space-3)", fontWeight: 600 }}>SCA</div>
-              <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>Vulnerable Dependencies</h3>
-              <p style={{ color: "var(--text-muted)", fontSize: "15px", marginBottom: "var(--space-3)" }}>
-                Software Composition Analysis (SCA) via OSV-Scanner covering npm, PyPI, Maven, Go, and Rust ecosystems.
-              </p>
-              <div className="code-block" style={{ fontSize: "12px", padding: "8px" }}>
-                <span className="tok-string">"express"</span>: <span className="tok-string">"4.16.0"</span> <span className="tok-comment">// GHSA-x...</span>
+      {/* How it works */}
+      <section
+        className="section"
+        style={{ background: "var(--surface)" }}
+      >
+        <div className="container">
+          <div style={{ textAlign: "center", marginBottom: "var(--space-7)" }}>
+            <p className="section-label">How It Works</p>
+            <h2 className="section-title">Four steps to a secure repo</h2>
+          </div>
+
+          <div className={styles.stepsGrid}>
+            {[
+              { step: "01", title: "Paste", desc: "Enter a public GitHub repository URL into the scanner.", icon: stepIcons.paste },
+              { step: "02", title: "Clone", desc: "Safe, shallow clone into an isolated, sandboxed environment.", icon: stepIcons.clone },
+              { step: "03", title: "Scan", desc: "Parallel execution of Semgrep, Gitleaks, and OSV-Scanner.", icon: stepIcons.scan },
+              { step: "04", title: "Report", desc: "Get a prioritized, deduplicated HTML/JSON vulnerability report.", icon: stepIcons.report },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`${styles.stepCard} reveal`}
+                data-reveal-idx={refIndex}
+                ref={addRef}
+                {...(refIndex++, {})}
+              >
+                <div className={styles.stepNumber}>{item.step}</div>
+                <div className={styles.stepIcon}>{item.icon}</div>
+                <h3 className={styles.stepTitle}>{item.title}</h3>
+                <p className={styles.stepDesc}>{item.desc}</p>
+                {i < 3 && <div className={styles.stepConnector} />}
               </div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
 
       {/* Comparison Table */}
-      <section id="compare" className="section" style={{ background: "var(--surface)" }}>
+      <section id="compare" className="section">
         <div className="container">
-          <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "var(--space-6)" }}>Why Argus?</h2>
+          <div style={{ textAlign: "center", marginBottom: "var(--space-7)" }}>
+            <p className="section-label">Compare</p>
+            <h2 className="section-title">Why Argus?</h2>
+            <p className="section-subtitle" style={{ margin: "0 auto" }}>
+              See how Argus compares to manual reviews and single-tool approaches.
+            </p>
+          </div>
           
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: "600px" }}>
+          <div
+            className={`${styles.tableWrap} reveal`}
+            data-reveal-idx={refIndex}
+            ref={addRef}
+            {...(refIndex++, {})}
+          >
+            <table className={styles.compareTable}>
               <thead>
                 <tr>
-                  <th style={{ padding: "16px", borderBottom: "1px solid var(--border)", color: "var(--text-muted)" }}>Feature</th>
-                  <th style={{ padding: "16px", borderBottom: "1px solid var(--border)", textAlign: "center" }}>Manual Review</th>
-                  <th style={{ padding: "16px", borderBottom: "1px solid var(--border)", textAlign: "center" }}>Single Tool</th>
-                  <th style={{ padding: "16px", borderBottom: "2px solid var(--accent)", background: "rgba(50,205,50,0.05)", textAlign: "center", color: "var(--accent)" }}>Argus</th>
+                  <th>Feature</th>
+                  <th>Manual Review</th>
+                  <th>Single Tool</th>
+                  <th className={styles.argusCol}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6, verticalAlign: -2 }}>
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Argus
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ["Code vulnerabilities (SAST)", "Time-consuming", "Yes", "Yes"],
-                  ["Leaked secrets", "Easy to miss", "Separate tool", "Yes"],
-                  ["Vulnerable dependencies", "No", "Separate tool", "Yes"],
-                  ["One unified report", "No", "No", "Yes"],
-                  ["Severity + risk score", "No", "Per tool", "Yes"],
+                  ["Code vulnerabilities (SAST)", "\u25D0 Time-consuming", "\u2713 Yes", "\u2713 Yes"],
+                  ["Leaked secrets", "\u25D0 Easy to miss", "\u2717 Separate tool", "\u2713 Yes"],
+                  ["Vulnerable dependencies", "\u2717 No", "\u2717 Separate tool", "\u2713 Yes"],
+                  ["One unified report", "\u2717 No", "\u2717 No", "\u2713 Yes"],
+                  ["Severity + risk score", "\u2717 No", "\u25D0 Per tool", "\u2713 Yes"],
+                  ["Fix guidance per finding", "\u25D0 Manual", "\u25D0 Varies", "\u2713 Yes"],
                   ["Setup effort", "None", "Per-tool install", "One URL"],
-                  ["Cost", "Your time", "Free", "Free"]
+                  ["Cost", "Your time", "Free", "Free"],
                 ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
-                    <td style={{ padding: "16px", fontWeight: 500 }}>{row[0]}</td>
-                    <td style={{ padding: "16px", textAlign: "center", color: "var(--text-muted)" }}>{row[1]}</td>
-                    <td style={{ padding: "16px", textAlign: "center", color: "var(--text-muted)" }}>{row[2]}</td>
-                    <td style={{ padding: "16px", textAlign: "center", background: "rgba(50,205,50,0.05)", fontWeight: 600 }}>{row[3]}</td>
+                  <tr key={i}>
+                    <td className={styles.featureCol}>{row[0]}</td>
+                    <td className={styles.statusCol}>
+                      <span className={`${styles.statusCell} ${row[1].startsWith("\u2713") ? styles.yes : row[1].startsWith("\u2717") ? styles.no : styles.partial}`}>
+                        {row[1]}
+                      </span>
+                    </td>
+                    <td className={styles.statusCol}>
+                      <span className={`${styles.statusCell} ${row[2].startsWith("\u2713") ? styles.yes : row[2].startsWith("\u2717") ? styles.no : styles.partial}`}>
+                        {row[2]}
+                      </span>
+                    </td>
+                    <td className={`${styles.statusCol} ${styles.argusCol}`}>
+                      <span className={`${styles.statusCell} ${styles.argusCell}`}>
+                        {row[3]}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -136,25 +317,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="section">
-        <div className="container">
-          <h2 style={{ fontSize: "28px", textAlign: "center", marginBottom: "var(--space-6)" }}>How it works</h2>
-          
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "var(--space-5)", textAlign: "center" }}>
+      {/* CTA Section */}
+      <section className={`section ${styles.ctaSection}`}>
+        <div className="container" style={{ textAlign: "center" }}>
+          <div className={styles.ctaGlow} />
+          <p className="section-label">Get Started</p>
+          <h2 className="section-title" style={{ maxWidth: 600, margin: "0 auto var(--space-3)" }}>
+            Ready to scan your first repo?
+          </h2>
+          <p className="section-subtitle" style={{ margin: "0 auto var(--space-6)" }}>
+            Paste a GitHub URL above, or try one of these example repositories.
+          </p>
+          <div className={styles.ctaExamples}>
             {[
-              { step: "1", title: "Paste", desc: "Submit a public GitHub repository URL." },
-              { step: "2", title: "Clone", desc: "Safe, shallow clone into an isolated sandbox." },
-              { step: "3", title: "Scan", desc: "Parallel execution of industry-standard security tools." },
-              { step: "4", title: "Report", desc: "Get a prioritized, deduplicated HTML report." }
-            ].map((item, i) => (
-              <div key={i}>
-                <div style={{ width: "48px", height: "48px", borderRadius: "50%", background: "var(--surface-2)", border: "1px solid var(--accent)", color: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: 600, margin: "0 auto var(--space-3)" }}>
-                  {item.step}
-                </div>
-                <h3 style={{ fontSize: "18px", marginBottom: "var(--space-2)" }}>{item.title}</h3>
-                <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>{item.desc}</p>
-              </div>
+              "OWASP/NodeGoat",
+              "OWASP/WebGoat",
+              "juice-shop/juice-shop",
+            ].map((repo) => (
+              <a
+                key={repo}
+                href={`https://github.com/${repo}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.ctaExample}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style={{ opacity: 0.5, flexShrink: 0 }}>
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+                {repo}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.3 }}>
+                  <line x1="7" y1="17" x2="17" y2="7"/>
+                  <polyline points="7 7 17 7 17 17"/>
+                </svg>
+              </a>
             ))}
           </div>
         </div>

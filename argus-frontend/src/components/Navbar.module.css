@@ -1,92 +1,163 @@
 .nav {
   position: sticky;
   top: 0;
-  z-index: 50;
-  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+.nav.scrolled {
+  background: rgba(0, 0, 0, 0.85);
+  border-bottom-color: var(--border);
+  box-shadow: 0 1px 12px rgba(0,0,0,0.3);
 }
 [data-theme="light"] .nav {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.6);
 }
+[data-theme="light"] .nav.scrolled {
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+}
+
 .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 64px;
 }
+
 .logo {
-  font-family: var(--font-mono);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text) !important;
-  text-decoration: none !important;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
+  text-decoration: none !important;
+  transition: opacity 0.2s ease;
+}
+.logo:hover {
+  opacity: 0.8;
 }
 .logoIcon {
   color: var(--accent);
-  font-size: 22px;
+  filter: drop-shadow(0 0 6px rgba(204,255,0,0.3));
+  flex-shrink: 0;
 }
+.logoText {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
 .links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 8px;
 }
 .links a {
   font-size: 14px;
   font-weight: 500;
   color: var(--text-muted);
-  transition: color 0.15s;
   text-decoration: none;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
 }
 .links a:hover {
   color: var(--text);
+  background: var(--surface-2);
   text-decoration: none;
 }
+
+.linksDivider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
 .ghBtn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
   font-size: 13px !important;
   padding: 6px 14px !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text) !important;
+  transition: all 0.2s ease;
 }
+.ghBtn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-hover);
+}
+
 .themeToggle {
   background: none;
-  border: none;
-  color: var(--text);
+  border: 1px solid transparent;
+  color: var(--text-muted);
   font-size: 20px;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  transition: background-color 0.15s;
+  transition: all 0.2s ease;
+  margin-left: 4px;
 }
 .themeToggle:hover {
   background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
 }
+
+/* Hamburger */
 .hamburger {
   display: none;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+}
+.hamburger:hover {
+  background: var(--surface-2);
 }
 .hamburger span {
   display: block;
-  width: 22px;
+  width: 20px;
   height: 2px;
   background: var(--text);
   border-radius: 1px;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+.hamburgerOpen span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburgerOpen span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburgerOpen span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 @media (max-width: 768px) {
+  .inner {
+    height: 56px;
+  }
   .links {
     display: none;
     position: absolute;
@@ -97,12 +168,27 @@
     background: var(--bg);
     border-bottom: 1px solid var(--border);
     padding: 16px 24px;
-    gap: 16px;
+    gap: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .links a {
+    width: 100%;
+    padding: 10px 12px;
+  }
+  .linksDivider {
+    width: 100%;
+    height: 1px;
+    margin: 4px 0;
   }
   .links.open {
     display: flex;
+    animation: fadeIn 0.2s ease-out;
   }
   .hamburger {
     display: flex;
+  }
+  .ghBtn {
+    width: 100%;
+    justify-content: center;
   }
 }

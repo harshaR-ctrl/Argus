@@ -1,24 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./TerminalPreview.module.css";
 
 const LINES = [
-  { text: "$ argus scan https://github.com/OWASP/NodeGoat", delay: 500, prompt: true },
-  { text: "Cloned OWASP/NodeGoat @ 3f9c2a1 (2.1s)", delay: 1500, color: "var(--accent)" },
-  { text: "Semgrep      28 findings", delay: 2000, color: "var(--accent)" },
-  { text: "Gitleaks      3 secrets", delay: 2500, color: "var(--accent)" },
-  { text: "OSV-Scanner  41 vulnerable dependencies", delay: 3000, color: "var(--accent)" },
-  { text: "Risk score: 82/100  Grade: F", delay: 3500, color: "var(--sev-critical)" },
-  { text: "Report -> ./reports/OWASP__NodeGoat/report.html", delay: 4000, color: "var(--text-muted)" },
+  { text: "$ argus scan https://github.com/OWASP/NodeGoat", delay: 0, type: "command" as const },
+  { text: "✓ Cloned OWASP/NodeGoat @ 3f9c2a1", meta: "2.1s", delay: 1800, type: "success" as const },
+  { text: "✓ Semgrep", meta: "28 findings", delay: 2500, type: "success" as const },
+  { text: "✓ Gitleaks", meta: "3 secrets", delay: 3200, type: "success" as const },
+  { text: "✓ OSV-Scanner", meta: "41 vulnerable deps", delay: 3900, type: "success" as const },
+  { text: "Risk score: 82/100  Grade: F", delay: 4600, type: "danger" as const },
+  { text: "Report → ./reports/OWASP__NodeGoat/report.html", delay: 5200, type: "muted" as const },
 ];
 
 export default function TerminalPreview() {
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const [typing, setTyping] = useState("");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let timeouts: NodeJS.Timeout[] = [];
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const intervals: ReturnType<typeof setInterval>[] = [];
     
     const runAnimation = () => {
       setVisibleLines(0);
@@ -47,12 +49,12 @@ export default function TerminalPreview() {
           
           // Loop animation
           timeouts.push(
-            setTimeout(runAnimation, 8000)
+            setTimeout(runAnimation, 9000)
           );
         }
-      }, 30);
+      }, 25);
       
-      timeouts.push(typeInterval as any);
+      intervals.push(typeInterval);
     };
 
     // Check prefers-reduced-motion
@@ -66,29 +68,49 @@ export default function TerminalPreview() {
 
     return () => {
       timeouts.forEach(clearTimeout);
+      intervals.forEach(clearInterval);
     };
   }, []);
 
   return (
-    <div className={styles.terminal}>
+    <div className={styles.terminal} ref={containerRef}>
       <div className={styles.header}>
         <div className={styles.dots}>
-          <span className={styles.dot} style={{ background: "#ff5f56" }} />
-          <span className={styles.dot} style={{ background: "#ffbd2e" }} />
-          <span className={styles.dot} style={{ background: "#27c93f" }} />
+          <span className={styles.dot} data-color="red" />
+          <span className={styles.dot} data-color="yellow" />
+          <span className={styles.dot} data-color="green" />
         </div>
-        <div className={styles.title}>bash</div>
+        <div className={styles.title}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 6 }}>
+            <polyline points="4 17 10 11 4 5"/>
+            <line x1="12" y1="19" x2="20" y2="19"/>
+          </svg>
+          bash — argus
+        </div>
+        <div style={{ width: 52 }} />
       </div>
       <div className={styles.body}>
-        <div className={styles.line}>
-          <span className={styles.prompt}></span>
-          {visibleLines === 0 ? typing : LINES[0].text}
-          {visibleLines === 0 && <span className={styles.cursor}></span>}
+        {/* Command line with typing */}
+        <div className={`${styles.line} ${styles.commandLine}`}>
+          <span className={styles.prompt}>$</span>
+          <span>{visibleLines === 0 ? typing.replace(/^\$ /, '') : LINES[0].text.replace(/^\$ /, '')}</span>
+          {visibleLines === 0 && <span className={styles.cursor}>▌</span>}
         </div>
         
+        {/* Output lines */}
         {LINES.slice(1, visibleLines).map((line, i) => (
-          <div key={i} className={styles.line} style={{ color: line.color }}>
-            {line.text}
+          <div 
+            key={i} 
+            className={`${styles.line} ${styles[line.type]} ${styles.outputLine}`}
+            style={{ animationDelay: `${i * 50}ms` }}
+          >
+            {line.type === "success" && (
+              <span className={styles.checkmark}>✓</span>
+            )}
+            <span className={styles.lineText}>{line.text.replace(/^✓ /, '')}</span>
+            {line.meta && (
+              <span className={styles.lineMeta}>{line.meta}</span>
+            )}
           </div>
         ))}
       </div>
