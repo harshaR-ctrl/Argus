@@ -122,7 +122,7 @@ export default function Home() {
               in one readable report. Free and open-source.
             </p>
 
-            <ScanInput />
+            <ScepticScanInput />
             
             <div className={styles.heroTerminal}>
               <TerminalPreview />
